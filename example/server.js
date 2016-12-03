@@ -15,7 +15,7 @@ const app    = require('./apps/si1145_app');
 
 const serverPort  = 1107;  // IIOT port definied and claimed by Agilatech
 
-var options       = {};
+var options       = {tls:{}};
 var keyfile       = null;
 var certfile      = null;
 var securityCheck = 0;
@@ -25,22 +25,18 @@ process.argv.forEach(function (val, index, array) {
 	if (index < 2) { return; }
 
 	if (array[index-1] == "-k") {
-		fs.readFile(val, (err, data) => {
-			if (!err) {
-				keyfile = data;
-				securityCheck++;
-			}
-		});
+		keyfile = fs.readFileSync(val);
+		securityCheck++;
 	}
 	else if (array[index-1] == "-c") {
-		fs.readFile(val, (err, data) => {
-			if (!err) {
-				certfile = data;
-				securityCheck++;
-			}
-		});
+		certfile = fs.readFileSync(val);
+		securityCheck++;
 	}
 });
+
+if (securityCheck == 2) {
+	options.tls = {key:keyfile, cert:certfile};
+}
 
 zetta(options)
     .name('testServer')
@@ -50,9 +46,7 @@ zetta(options)
 
     .use(app)
     .listen(serverPort, function() {
-    	if (securityCheck == 2) {
-			console.log(`*** Zetta Test Server running ${(securityCheck == 2) ? 'with TLS Security' : 'unsecured'} on port ${serverPort}`);
-		}
+		console.log(`*** Zetta Test Server running ${(securityCheck == 2) ? 'with TLS Security' : 'unsecured'} on port ${serverPort}`);
 	});
 
 /*  Example TSL files created using OpenSSL with the following commands:
