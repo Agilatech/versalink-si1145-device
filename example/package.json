@@ -1,5 +1,5 @@
 {
-  "name": "zetta-si1145-linux-example",
+  "name": "versalink-si1145-example",
   "version": "0.1.0",
   "description": "an example for using the si1145 device",
   "main": "server.js",

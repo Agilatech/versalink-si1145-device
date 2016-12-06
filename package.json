@@ -1,6 +1,6 @@
 {
   "name": "versalink-si1145-device",
-  "version": "0.8.1",
+  "version": "0.8.0",
   "description": "SI1145 UV/IR/Visible light device driver for use in the Agilatech VersaLink system",
   "main": "si1145.js",
   "directories": {

@@ -11,10 +11,11 @@
 const options = require('./options');
 
 const Scout = require('zetta-scout');
-const Si1145 = require('../si1145');
+//const Si1145 = require('../si1145');
+const si1145 = require('../si1145');
 const util = require('util');
 
-var Si1145Scout = module.exports = function(opts) {
+const Si1145Scout = module.exports = function(opts) {
     
   // see if any of the options were overridden in the server
 
@@ -44,9 +45,11 @@ util.inherits(Si1145Scout, Scout);
 
 Si1145Scout.prototype.init = function(next) {
 
-  var self = this;
+  const self = this;
 
-  var query = this.server.where({name: 'SI1145'});
+  const Si1145 = new si1145(options);
+
+  const query = this.server.where({name: 'SI1145'});
   
   this.server.find(query, function(err, results) {
     if (results[0]) {

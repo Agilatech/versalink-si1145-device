@@ -15,7 +15,7 @@ const app    = require('./apps/si1145_app');
 
 const serverPort  = 1107;  // IIOT port definied and claimed by Agilatech
 
-var options       = {tls:{}};
+var options       = {};
 var keyfile       = null;
 var certfile      = null;
 var securityCheck = 0;
@@ -46,8 +46,10 @@ zetta(options)
 
     .use(app)
     .listen(serverPort, function() {
-		console.log(`*** Zetta Test Server running ${(securityCheck == 2) ? 'with TLS Security' : 'unsecured'} on port ${serverPort}`);
+		console.log(`*** VersaLink Test Server running ${(securityCheck == 2) ? 'with TLS Security' : 'unsecured'} on port ${serverPort}`);
 	});
+
+
 
 /*  Example TSL files created using OpenSSL with the following commands:
 

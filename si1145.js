@@ -19,24 +19,24 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-const versalinkDevice = require('versalink-device');
+const VersalinkDevice = require('versalink-device');
 const device = require('@agilatech/si1145');
-const util = require('util');
 
-var si1145 = module.exports = function(options) {
+module.exports = class Si1145 extends VersalinkDevice {
 
-  this.options = options || {};
+	constructor(options) {
 
-  // The bus/file must be defined. If not supplied in options, then default to i2c-1
-  const i2cBus  = this.options['bus'] || "/dev/i2c-1";
+		// The bus/file must be defined. If not supplied in options, then default to i2c-1
+  		const i2cBus  = options['bus'] || "/dev/i2c-1";
 
-  // SI1145 device constructor takes two arguments: the bus/file and the address.
-  // In this case, the address is fixed on the hardware, so it is just hardcoded here.
-  this.hardware = new device.Si1145(i2cBus, 0x60);
+  		// SI1145 device constructor takes two arguments: the bus/file and the address.
+		// In this case, the address is fixed on the hardware, so it is just hardcoded here.
+	  	const hardware = new device.Si1145(i2cBus, 0x60);
 
-  // load all the functionality of the versalink device
-  versalinkDevice.call(this);
+		super(hardware, options);
+  		
+	}
+}
 
-};
 
-util.inherits(si1145, versalinkDevice);
+
