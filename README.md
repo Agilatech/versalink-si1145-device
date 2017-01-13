@@ -1,6 +1,6 @@
 ##VersaLink SI1145 IR/Visible/UV light sensor device driver
 
-This driver is designed to work on any Linux platform, and has been thouroghly tested on BeagleBone Black
+This device driver is specifically designed to be used with the Agilatech VersaLink IOT System.
 
 ###Install
 ```
@@ -52,14 +52,13 @@ Value ranges may also be defined in the options, and are closely related to delt
 where the &lt;numeric range&gt; is a number representing the absolute range of the value.
 
 ####options example
-Here is an example of an options varible which stream values every 10 seconds, polls the device every second, requires an 8% delta change to register a new monitored value, and defines
-valid ranges on all parameters:
+Here is an example of an options varible which stream values every 10 seconds, polls the device every second, requires an 8% delta change to register a new monitored value, and defines valid ranges on all parameters:
 ```
 const options = {
     "streamPeriod":10000, 
     "devicePoll":1000, 
     "deltaPercent":8,
-    "bus":"/dev/i2c-1"
+    "bus":"/dev/i2c-1",
     "ir_range":20000,
     "visible_range":20000
     "uv_range":11
