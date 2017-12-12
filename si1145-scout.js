@@ -1,48 +1,51 @@
-
-const options = require('./options');
+const config = require('./config');
 
 const Scout = require('zetta-scout');
-const si1145 = require('./si1145');
-const util = require('util');
+const Si1145 = require('./si1145');
 
-const Si1145Scout = module.exports = function(opts) {
-    
-  // see if any of the options were overridden in the server
+module.exports = class Si1145Scout extends Scout {
 
-  if (typeof opts !== 'undefined') {
-    
-    // copy all options defined in the server
-    for (const key in opts) {
-      if (typeof opts[key] !== 'undefined') {
-        options[key] = opts[key];
+  constructor(opts) {
+
+    super();
+
+    if (typeof opts !== 'undefined') {
+      // copy all config options defined in the server
+      for (const key in opts) {
+        if (typeof opts[key] !== 'undefined') {
+          config[key] = opts[key];
+        }
       }
     }
-    
+
+    if (config.name === undefined) { config.name = "SI1145" }
+    this.name = config.name;
+
+    this.si1145 = new Si1145(config);
+
   }
 
-  Scout.call(this);
-};
-
-util.inherits(Si1145Scout, Scout);
-
-Si1145Scout.prototype.init = function(next) {
-
-  const self = this;
-
-  const Si1145 = new si1145(options);
-
-  const query = this.server.where({name: 'SI1145'});
+  init(next) {
+    const query = this.server.where({name: this.name});
   
-  this.server.find(query, function(err, results) {
-    if (results[0]) {
-      self.provision(results[0], Si1145, options);
-      self.server.info('Provisioned SI1145');
-    } else {
-      self.discover(Si1145, options);
-      self.server.info('Discovered new device SI1145');
-    }
-  });
+    const self = this;
 
-  next();
+    this.server.find(query, function(err, results) {
+      if (!err) {
+        if (results[0]) {
+          self.provision(results[0], self.si1145);
+          self.server.info('Provisioned known device ' + self.name);
+        } else {
+          self.discover(self.si1145);
+          self.server.info('Discovered new device ' + self.name);
+        }
+      }
+      else {
+        self.server.error(err);
+      }
+    });
 
-};
+    next();
+  }
+
+}
